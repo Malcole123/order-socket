@@ -1,0 +1,20 @@
+##SOCKET EVENT EMITS
+
+listing_view_start
+
+Sent from client to server at the beginning of viewing a listing page
+Update views and identifies generic views and repeat visitors
+
+---> EMITS 
+    view_success_start  # LINE START 10
+
+
+
+view_start_success
+Sent from server to client when  view is registered succesfully 
+
+
+view_start_fail
+Sent from server to client when view start has failed 
+
+
