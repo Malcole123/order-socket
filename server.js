@@ -63,7 +63,8 @@ io.on('connection', (socket) => {
    });
 
    
-   socket.on('seller_complete_request', async ({redeem_reference, order_reference, user_email, authToken})=>{
+   socket.on('seller_complete_request', (data)=>{
+        const { order_reference , redeem_reference } = data;
     //Triggered when a user qr code is scanned by seller application
         ioEmit('order_complete', {
             redeem_reference,
@@ -89,7 +90,8 @@ io.on('connection', (socket) => {
    })
 
 
-   socket.on('get_redeem_response', ({order_reference, redeem_reference})=>{
+   socket.on('get_redeem_response', (data)=>{
+    const { order_reference , redeem_reference } = data;
         //Simulates response from " seller_redeem_accept "
         ioEmit('order_complete', {
             redeem_reference,
