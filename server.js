@@ -37,6 +37,16 @@ app.use(express.urlencoded({extended:false}));
  * 
  */
 
+
+const ioEmit = (event_name, data)=>{
+    try{
+        io.emit(event_name, data);
+        return true
+    }catch(err){
+        return false
+    }
+}
+
 io.on('connection', (socket) => {
     console.log('connected')
     socket.on('disconnect', () => {
@@ -46,19 +56,19 @@ io.on('connection', (socket) => {
 
    socket.on('user_redeem_request', async ({redeem_reference, order_reference, user_email, authToken})=>{
     //Triggered when a user qr code is scanned by seller application
-        socket.emit('order_redeem_pending', {
+        ioEmit('order_redeem_pending', {
             redeem_reference,
             order_reference,
-        })     
+        });    
    });
 
    
    socket.on('seller_complete_request', async ({redeem_reference, order_reference, user_email, authToken})=>{
     //Triggered when a user qr code is scanned by seller application
-        socket.emit('order_complete', {
+        ioEmit('order_complete', {
             redeem_reference,
             order_reference,
-        })     
+        });
    });
 
    socket.on('seller_redeem_accept', ()=>{
@@ -78,21 +88,22 @@ io.on('connection', (socket) => {
 
    })
 
+
+   socket.on('get_redeem_response', ({order_reference, redeem_reference})=>{
+        //Simulates response from " seller_redeem_accept "
+        ioEmit('order_complete', {
+            redeem_reference,
+            order_reference,
+        });
+})
+
+
    socket.on('user_redeem_display', ()=>{
     //Triggered when a user displays a qr code while at valid branch location 
         //Used for caching purposes in xno
 
    })
    //TEST EMITS
-
-   socket.on('get_redeem_response', ()=>{
-        //Simulates response from " seller_redeem_accept "
-        socket.emit('order_complete', {
-            order_reference:"",
-
-        })
-   })
-
  
 });
 
